@@ -14,5 +14,9 @@ class Network:
     def addOutputLayer(self, dimension, activation) -> None:
         pass
 
+    def forwardPass(self):
+        # TODO
+        pass
+
     def fit(self, inputs, labels, loss, batch_size=20, epoch=100) -> []:
         pass
