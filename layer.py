@@ -11,8 +11,11 @@ class Layer:
 
 
 class InputLayer(Layer):
-    def __init__(self, size, inputs):
+    def __init__(self, size):
         super().__init__(size)
+
+    # Set the input vector to this layer
+    def setup(self, inputs):
         self.outputValue = inputs
 
 
