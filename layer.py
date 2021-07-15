@@ -24,9 +24,13 @@ class InputLayer(Layer):
 
 
 class HiddenLayer(Layer):
-    def __init__(self, size, activation):
+    def __init__(self, pre_size, size, activation):
         super().__init__(size)
         self.activation = activation
+        self.weights = np.random.rand(size, pre_size)
+
+        for i in range(size):
+            self.weights[i][-1] = 1.
 
     def forward(self, inputs, weight):
         self.weightedSum = weight @ inputs
@@ -34,9 +38,13 @@ class HiddenLayer(Layer):
 
 
 class OutputLayer(Layer):
-    def __init__(self, size, activation):
+    def __init__(self, pre_size, size, activation):
         super().__init__(size)
         self.activation = activation
+        self.weights = np.random.rand(size, pre_size)
+
+        for i in range(size):
+            self.weights[i][-1] = 1.
 
     def forward(self, inputs, weight):
         self.weightedSum = weight @ inputs

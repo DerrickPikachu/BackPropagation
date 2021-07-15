@@ -7,3 +7,9 @@ def sigmoid(x):
 
 def derivative_sigmoid(x):
     return np.multiply(x, 1.0 - x)
+
+
+functionDic = {
+    'sigmoid': sigmoid,
+    'derivative_sigmoid': derivative_sigmoid,
+}
