@@ -3,11 +3,15 @@ import numpy as np
 
 class Layer:
     def __init__(self, size):
-        self.weightedSum = np.zeros((size, 1))
-        self.outputValue = np.zeros((size, 1))
+        self.weightedSum = None
+        # The last one is used to multiply the bias weight
+        self.outputValue = np.zeros((size + 1, 1))
 
     def forward(self, inputs, weight):
         pass
+
+    def size(self):
+        return self.outputValue.size
 
 
 class InputLayer(Layer):
