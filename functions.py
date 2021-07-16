@@ -9,12 +9,12 @@ def derivative_sigmoid(x):
     return np.multiply(x, 1.0 - x)
 
 
-def cross_entropy(y_hat, y):
-    return y @ (-np.log(y_hat))
+def bin_cross_entropy(y_hat, y):
+    return -np.log(y_hat) if y[0] == 1 else -np.log(1 - y_hat)
 
 
-def derivative_cross_entropy(y_hat, y):
-    return -(y / y_hat)
+def derivative_bin_cross_entropy(y_hat, y):
+    return -y / y_hat + (1 - y) / (1 - y_hat)
 
 
 functionDic = {
@@ -23,7 +23,7 @@ functionDic = {
         'derivative': derivative_sigmoid,
     },
     'cross_entropy': {
-        'normal': cross_entropy,
-        'derivative': derivative_cross_entropy,
+        'normal': bin_cross_entropy,
+        'derivative': derivative_bin_cross_entropy,
     }
 }

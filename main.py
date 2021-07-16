@@ -44,8 +44,8 @@ print("2. XOR")
 choice = int(input())
 
 # Build training data
-x = np.array([], np.float)
-labels = np.array([], np.int)
+x = np.array([], float)
+labels = np.array([], int)
 if choice == 1:
     x, labels = generate_linear()
 elif choice == 2:
@@ -54,11 +54,12 @@ elif choice == 2:
 # Build the neuron network
 model = Network()
 model.addInputLayer(dimension=2)
-model.addHiddenLayer(neurons=2, activation="ReLU")
-model.addHiddenLayer(neurons=2, activation="ReLU")
-model.addOutputLayer(dimension=1, activation="sigmoid")
+model.addHiddenLayer(neurons=2, activation="sigmoid")
+model.addHiddenLayer(neurons=2, activation="sigmoid")
+model.addOutputLayer(neurons=1, activation="sigmoid")
 
 # Training
-lossValue, hitRate = model.fit(inputs=x, labels=labels, loss="cross_entropy")
+# lossValue, hitRate = model.fit(inputs=x, labels=labels, loss_f="cross_entropy")
+model.fit(inputs=x, labels=labels, loss_f="cross_entropy", epoch=9500, batch_size=10)
 
 # Show graph below

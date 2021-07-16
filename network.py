@@ -56,13 +56,9 @@ class Network:
 
     def backwardPass(self, loss_f, labels):
         outputDistribution = self.outputLayer.outputValue
-        if self.outputLayer.size() == 1:
-            outputDistribution = np.array([self.outputLayer.outputValue[0], 1 - self.outputLayer.outputValue[0]])
-            labels = np.array([labels[0], 1 - labels[0]])
 
         firstGradient = functionDic[loss_f]['derivative'](y_hat=outputDistribution, y=labels)
 
-        gradient = None
         if len(self.hiddenLayer) == 0:
             gradient = self.outputLayer.backward(self.inputLayer.outputValue, firstGradient)
         else:
@@ -74,30 +70,45 @@ class Network:
             else:
                 gradient = self.hiddenLayer[i].backward(self.hiddenLayer[i-1].outputValue, gradient)
 
-    def fit(self, inputs, labels, loss, batch_size=20, epoch=100) -> []:
-        batchData = []
-        batchDataLen = inputs.shape[0] / batch_size
+    def update(self):
+        for hidden in self.hiddenLayer:
+            hidden.update()
+        self.outputLayer.update()
 
-        # Fill data in each batch
-        for i in range(batchDataLen):
-            batchData.append(inputs[i * batch_size : (i + 1) * batch_size])
-
+    def fit(self, inputs, labels, loss_f, batch_size=15, epoch=100) -> []:
         for i in range(epoch):
-            for batch in batchData:
-                for data in batch:
-                    self.inputLayer.setup(data)
-                    self.forwardPass()
-                    self.backwardPass()
+            lossSum = 0
+            trainOrder = np.arange(len(inputs))
+            np.random.shuffle(trainOrder)
+
+            counter = 0
+            for index in trainOrder:
+                self.inputLayer.setup(inputs[index])
+                self.forwardPass()
+
+                loss = functionDic[loss_f]['normal'](
+                    y_hat=self.outputLayer.outputValue,
+                    y=labels[index]
+                )
+                lossSum = lossSum + loss
+
+                self.backwardPass(loss_f, labels[index])
+
+                counter = counter + 1
+                if counter == batch_size:
+                    self.update()
+                    counter = 0
+
+            self.update()
+            print("epoch {} loss: {}".format(i, lossSum / len(inputs)))
 
 
 if __name__ == "__main__":
     myNet = Network()
-    myNet.addInputLayer(2)
-    myNet.addHiddenLayer(2, "sigmoid")
-    myNet.addHiddenLayer(2, "sigmoid")
-    myNet.addOutputLayer(1, "sigmoid")
-
-    myNet.inputLayer.setup(np.array([1, 2]))
+    myNet.addInputLayer(dimension=2)
+    myNet.addHiddenLayer(neurons=2, activation="sigmoid")
+    myNet.addOutputLayer(neurons=1, activation="sigmoid")
+    myNet.inputLayer.setup(np.array([1, 0]))
     myNet.forwardPass()
-    myNet.backwardPass('cross_entropy', np.array([0]))
-    print("finish")
+    myNet.backwardPass('cross_entropy', np.array([1]))
+    print(myNet.outputLayer.outputValue)
