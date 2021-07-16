@@ -11,6 +11,9 @@ class Layer:
     def forward(self, inputs):
         pass
 
+    def backward(self, inputs, back_gradient):
+        pass
+
     def size(self):
         return self.outputValue.size
 
@@ -35,18 +38,16 @@ class HiddenLayer(Layer):
 
     def forward(self, inputs):
         self.weightedSum = self.weights @ inputs
-        self.outputValue = np.append(self.activation(self.weightedSum), np.array([1]))
+        self.outputValue = np.append(self.activation['normal'](self.weightedSum), np.array([1]))
+
+    def backward(self, inputs, back_gradient):
+        pass
 
 
-class OutputLayer(Layer):
+class OutputLayer(HiddenLayer):
     def __init__(self, pre_size, size, activation):
-        super().__init__(size)
-        self.activation = activation
-        self.weights = np.random.uniform(0., 1., (size, pre_size))
-
-        for i in range(size):
-            self.weights[i][-1] = np.random.uniform(0, 0.3)
+        super().__init__(pre_size, size, activation)
 
     def forward(self, inputs):
         self.weightedSum = self.weights @ inputs
-        self.outputValue = self.activation(self.weightedSum)
+        self.outputValue = self.activation['normal'](self.weightedSum)

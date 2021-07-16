@@ -73,7 +73,6 @@ class Network:
                     self.backwardPass()
 
 
-
 if __name__ == "__main__":
     myNet = Network()
     myNet.addInputLayer(2)

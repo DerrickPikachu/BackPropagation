@@ -10,6 +10,8 @@ def derivative_sigmoid(x):
 
 
 functionDic = {
-    'sigmoid': sigmoid,
-    'derivative_sigmoid': derivative_sigmoid,
+    'sigmoid': {
+        'normal': sigmoid,
+        'derivative': derivative_sigmoid,
+    }
 }
