@@ -54,8 +54,24 @@ class Network:
             tem = hidden.outputValue
         self.outputLayer.forward(tem)
 
-    def fit(self, inputs, labels, loss, batch_size=20, epoch=100) -> []:
+    def backwardPass(self):
         pass
+
+    def fit(self, inputs, labels, loss, batch_size=20, epoch=100) -> []:
+        batchData = []
+        batchDataLen = inputs.shape[0] / batch_size
+
+        # Fill data in each batch
+        for i in range(batchDataLen):
+            batchData.append(inputs[i * batch_size : (i + 1) * batch_size])
+
+        for i in range(epoch):
+            for batch in batchData:
+                for data in batch:
+                    self.inputLayer.setup(data)
+                    self.forwardPass()
+                    self.backwardPass()
+
 
 
 if __name__ == "__main__":
