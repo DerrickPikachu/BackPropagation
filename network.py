@@ -48,18 +48,11 @@ class Network:
             )
 
     def forwardPass(self):
-        pass
-        # self.inputLayer = InputLayer(size=2)
-        # hiddenLayer = HiddenLayer(size=2, activation=sigmoid)
-        # self.outputLayer = OutputLayer(size=2, activation=sigmoid)
-        #
-        # self.inputLayer.setup([1, 2])
-        # weights1 = np.array([[0.5, 0.5], [0.5, 0.5]])
-        # weights2 = np.array([[2, 3], [4, 5]])
-        #
-        # hiddenLayer.forward(inputs=self.inputLayer.outputValue, weight=weights1)
-        # self.outputLayer.forward(hiddenLayer.outputValue, weights2)
-        # print(self.outputLayer.outputValue)
+        tem = self.inputLayer.outputValue
+        for hidden in self.hiddenLayer:
+            hidden.forward(tem)
+            tem = hidden.outputValue
+        self.outputLayer.forward(tem)
 
     def fit(self, inputs, labels, loss, batch_size=20, epoch=100) -> []:
         pass
@@ -67,4 +60,11 @@ class Network:
 
 if __name__ == "__main__":
     myNet = Network()
+    myNet.addInputLayer(2)
+    myNet.addHiddenLayer(2, "sigmoid")
+    myNet.addHiddenLayer(2, "sigmoid")
+    myNet.addOutputLayer(1, "sigmoid")
+
+    myNet.inputLayer.setup(np.array([1, 2]))
     myNet.forwardPass()
+    print("forward finish")
