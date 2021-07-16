@@ -32,6 +32,7 @@ class HiddenLayer(Layer):
         super().__init__(size)
         self.activation = activation
         self.weights = np.random.rand(size, pre_size)
+        self.gradientMatrix = None
 
         for i in range(size):
             self.weights[i][-1] = np.random.uniform(0, 0.3)
@@ -40,8 +41,23 @@ class HiddenLayer(Layer):
         self.weightedSum = self.weights @ inputs
         self.outputValue = np.append(self.activation['normal'](self.weightedSum), np.array([1]))
 
+    # TODO: Haven't been test
     def backward(self, inputs, back_gradient):
-        pass
+        activationGradient = self.activation['derivative'](self.weightedSum)
+        weightedSumGradient = activationGradient * back_gradient
+
+        self.gradientMatrix = None
+        for element in inputs:
+            col = element * weightedSumGradient
+            if self.gradientMatrix is None:
+                self.gradientMatrix = col
+            else:
+                self.gradientMatrix = np.c_[self.gradientMatrix, weightedSumGradient]
+
+        return weightedSumGradient @ self.weights[:, :-1]
+
+    def update(self, alpha=0.1):
+        self.weights = self.weights - alpha * self.gradientMatrix
 
 
 class OutputLayer(HiddenLayer):
@@ -51,3 +67,10 @@ class OutputLayer(HiddenLayer):
     def forward(self, inputs):
         self.weightedSum = self.weights @ inputs
         self.outputValue = self.activation['normal'](self.weightedSum)
+
+    def backward(self, inputs, back_gradient):
+        gradient = None
+        if self.size() == 1:
+            gradient = back_gradient[0] if back_gradient[0] != 0 else -back_gradient[1]
+        return super().backward(inputs, np.array([gradient]))
+

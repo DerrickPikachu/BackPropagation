@@ -54,8 +54,25 @@ class Network:
             tem = hidden.outputValue
         self.outputLayer.forward(tem)
 
-    def backwardPass(self):
-        pass
+    def backwardPass(self, loss_f, labels):
+        outputDistribution = self.outputLayer.outputValue
+        if self.outputLayer.size() == 1:
+            outputDistribution = np.array([self.outputLayer.outputValue[0], 1 - self.outputLayer.outputValue[0]])
+            labels = np.array([labels[0], 1 - labels[0]])
+
+        firstGradient = functionDic[loss_f]['derivative'](y_hat=outputDistribution, y=labels)
+
+        gradient = None
+        if len(self.hiddenLayer) == 0:
+            gradient = self.outputLayer.backward(self.inputLayer.outputValue, firstGradient)
+        else:
+            gradient = self.outputLayer.backward(self.hiddenLayer[-1].outputValue, firstGradient)
+
+        for i in range(len(self.hiddenLayer) - 1, -1, -1):
+            if i == 0:
+                gradient = self.hiddenLayer[i].backward(self.inputLayer.outputValue, gradient)
+            else:
+                gradient = self.hiddenLayer[i].backward(self.hiddenLayer[i-1].outputValue, gradient)
 
     def fit(self, inputs, labels, loss, batch_size=20, epoch=100) -> []:
         batchData = []
@@ -82,4 +99,5 @@ if __name__ == "__main__":
 
     myNet.inputLayer.setup(np.array([1, 2]))
     myNet.forwardPass()
-    print("forward finish")
+    myNet.backwardPass('cross_entropy', np.array([0]))
+    print("finish")
