@@ -60,6 +60,6 @@ model.addOutputLayer(neurons=1, activation="sigmoid")
 
 # Training
 # lossValue, hitRate = model.fit(inputs=x, labels=labels, loss_f="cross_entropy")
-model.fit(inputs=x, labels=labels, loss_f="cross_entropy", epoch=9500, batch_size=10)
+model.fit(inputs=x, labels=labels, loss_f="cross_entropy", epoch=3000, batch_size=10)
 
 # Show graph below

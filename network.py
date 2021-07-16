@@ -76,8 +76,9 @@ class Network:
         self.outputLayer.update()
 
     def fit(self, inputs, labels, loss_f, batch_size=15, epoch=100) -> []:
-        for i in range(epoch):
+        for i in range(1, epoch + 1):
             lossSum = 0
+            hits = 0
             trainOrder = np.arange(len(inputs))
             np.random.shuffle(trainOrder)
 
@@ -85,6 +86,10 @@ class Network:
             for index in trainOrder:
                 self.inputLayer.setup(inputs[index])
                 self.forwardPass()
+
+                if (labels[index] == 1 and self.outputLayer.outputValue > 0.5)\
+                        or (labels[index] == 0 and self.outputLayer.outputValue <= 0.5):
+                    hits = hits + 1
 
                 loss = functionDic[loss_f]['normal'](
                     y_hat=self.outputLayer.outputValue,
@@ -100,7 +105,8 @@ class Network:
                     counter = 0
 
             self.update()
-            print("epoch {} loss: {}".format(i, lossSum / len(inputs)))
+            if i % 100 == 0:
+                print("epoch {} loss: {} hit rate: {}".format(i, lossSum / len(inputs), hits / len(inputs)))
 
 
 if __name__ == "__main__":
