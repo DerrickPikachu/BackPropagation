@@ -31,7 +31,7 @@ class HiddenLayer(Layer):
     def __init__(self, pre_size, size, activation):
         super().__init__(size)
         self.activation = activation
-        self.weights = np.random.uniform(-5, 5, (size, pre_size))
+        self.weights = np.random.uniform(-3, 3, (size, pre_size))
         # self.weights = np.array([[0.5, 0.5, 0], [0.5, 0.5, 0]])
         self.gradientMatrix = np.zeros((size, pre_size))
 

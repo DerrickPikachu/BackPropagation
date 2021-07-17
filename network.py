@@ -75,6 +75,14 @@ class Network:
             hidden.update()
         self.outputLayer.update()
 
+    def predict(self, inputs):
+        pred_y = []
+        for i in inputs:
+            self.inputLayer.setup(i)
+            self.forwardPass()
+            pred_y.append(1 if self.outputLayer.outputValue[0] > 0.5 else 0)
+        return np.array(pred_y)
+
     def fit(self, inputs, labels, loss_f, batch_size=15, epoch=100) -> []:
         for i in range(1, epoch + 1):
             lossSum = 0
