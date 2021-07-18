@@ -1,6 +1,7 @@
 from network import Network
 from functions import *
 import numpy as np
+import pickle
 import matplotlib.pyplot as plt
 
 
@@ -42,6 +43,9 @@ class Interface:
         plt.plot(epochs, loss)
         plt.show()
 
+    def saveModel(self, filename):
+        pickle.dump(self.model, open(filename, 'wb'))
+
     def show(self):
         # Training or testing?
         print("DO you want to use saved network?")
@@ -60,7 +64,7 @@ class Interface:
             # Generate data
             if choice == 1:
                 x, labels = functionDic['generateData']['linear']()
-            elif choice == 2:
+            else:
                 x, labels = functionDic['generateData']['XOR']()
 
             # Training
@@ -77,3 +81,12 @@ class Interface:
             pred_y = self.model.predict(inputs=x)
             self.show_result(x, labels, pred_y)
             self.show_learning_curve(range(1, epoch + 1), lossRecord)
+
+            # Saving the network
+            print('Do you want to save the network?')
+            print('1. yes, 2. no')
+            choice = int(input())
+            if choice == 1:
+                print('What is the file name?')
+                filename = input()
+                self.saveModel(filename)
