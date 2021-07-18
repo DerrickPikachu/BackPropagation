@@ -46,27 +46,46 @@ class Interface:
     def saveModel(self, filename):
         pickle.dump(self.model, open(filename, 'wb'))
 
+    def loadModel(self, filename):
+        self.model = pickle.load(open(filename, 'rb'))
+
     def show(self):
+        # Choose the training data
+        print("Chose the data set:")
+        print("1. linear")
+        print("2. XOR")
+        print("3. nonlinear")
+        choice = int(input())
+
+        # Generate data
+        if choice == 1:
+            x, labels = functionDic['generateData']['linear'](n=500)
+        elif choice == 2:
+            x, labels = functionDic['generateData']['XOR']()
+        else:
+            x, labels = functionDic['generateData']['nonlinear'](n=1000)
+
         # Training or testing?
         print("DO you want to use saved network?")
         print("1. use saved network, 2. train a new one")
         choice = int(input())
 
         if choice == 1:
-            pass
+            # Load the network
+            print('Which file you want to read?')
+            filename = input()
+            self.loadModel(filename)
+
+            pred_y = self.model.predict(inputs=x)
+
+            hits = 0
+            for i in range(len(labels)):
+                if pred_y[i] == labels[i]:
+                    hits = hits + 1
+            print("hit rate: {}".format(hits / len(labels)))
+
+            self.show_result(x, labels, pred_y)
         else:
-            # Choose the training data
-            print("Chose the data set:")
-            print("1. linear")
-            print("2. XOR")
-            choice = int(input())
-
-            # Generate data
-            if choice == 1:
-                x, labels = functionDic['generateData']['linear']()
-            else:
-                x, labels = functionDic['generateData']['XOR']()
-
             # Training
             self.buildNetwork()
             epoch, lossRecord = self.model.fit(

@@ -43,6 +43,22 @@ def generate_linear(n=100):
     return np.array(inputs), np.array(labels).reshape(n, 1)
 
 
+def generate_cube(n=100):
+    pts = np.random.uniform(0, 1, (n, 2))
+    inputs = []
+    labels = []
+
+    for pt in pts:
+        inputs.append([pt[0], pt[1]])
+
+        if pt[0] ** 3 > pt[1]:
+            labels.append(0)
+        else:
+            labels.append(1)
+
+    return np.array(inputs), np.array(labels).reshape(n, 1)
+
+
 def generate_XOR_easy():
     inputs = []
     labels = []
@@ -76,5 +92,6 @@ functionDic = {
     'generateData': {
         'linear': generate_linear,
         'XOR': generate_XOR_easy,
+        'nonlinear': generate_cube,
     }
 }
