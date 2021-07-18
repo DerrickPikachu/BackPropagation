@@ -58,6 +58,13 @@ def show_result(x, y, pred_y):
     plt.show()
 
 
+def show_learning_curve(epochs, loss):
+    plt.subplot(1, 1, 1)
+    plt.title('Learning curve', fontsize=18)
+    plt.plot(epochs, loss)
+    plt.show()
+
+
 # Choose the training data
 print("Chose the data set:")
 print("1. linear")
@@ -83,8 +90,9 @@ model.addOutputLayer(neurons=1, activation="sigmoid")
 
 # Training
 # lossValue, hitRate = model.fit(inputs=x, labels=labels, loss_f="cross_entropy")
-model.fit(inputs=x, labels=labels, loss_f="cross_entropy", epoch=3000, batch_size=10)
+epoch, lossRecord = model.fit(inputs=x, labels=labels, loss_f="cross_entropy", epoch=3000, batch_size=10)
 
 # Show graph below
 pred_y = model.predict(inputs=x)
 show_result(x, labels, pred_y)
+show_learning_curve(range(1, epoch + 1), lossRecord)

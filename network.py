@@ -84,6 +84,7 @@ class Network:
         return np.array(pred_y)
 
     def fit(self, inputs, labels, loss_f, batch_size=15, epoch=100) -> []:
+        lossRecord = []
         for i in range(1, epoch + 1):
             lossSum = 0
             hits = 0
@@ -115,6 +116,10 @@ class Network:
             self.update()
             if i % 100 == 0:
                 print("epoch {} loss: {} hit rate: {}".format(i, lossSum / len(inputs), hits / len(inputs)))
+
+            lossRecord.append(lossSum / len(inputs))
+
+        return epoch, np.array(lossRecord)
 
 
 if __name__ == "__main__":
