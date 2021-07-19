@@ -12,10 +12,13 @@ class Interface:
     def buildNetwork(self):
         self.model = Network()
         self.model.addInputLayer(dimension=2)
+        # self.model.addHiddenLayer(neurons=4, activation="none")
+        # self.model.addHiddenLayer(neurons=4, activation="none")
         self.model.addHiddenLayer(neurons=2, activation="sigmoid")
-        self.model.addHiddenLayer(neurons=2, activation="sigmoid")
+        self.model.addHiddenLayer(neurons=3, activation="sigmoid")
         # self.model.addHiddenLayer(neurons=2, activation="ReLU")
         # self.model.addHiddenLayer(neurons=2, activation="ReLU")
+        # self.model.addOutputLayer(neurons=1, activation="none")
         self.model.addOutputLayer(neurons=1, activation="sigmoid")
 
     def show_result(self, x, y, pred_y):
@@ -59,7 +62,7 @@ class Interface:
 
         # Generate data
         if choice == 1:
-            x, labels = functionDic['generateData']['linear'](n=500)
+            x, labels = functionDic['generateData']['linear'](n=100)
         elif choice == 2:
             x, labels = functionDic['generateData']['XOR']()
         else:
@@ -76,7 +79,8 @@ class Interface:
             filename = input()
             self.loadModel(filename)
 
-            pred_y = self.model.predict(inputs=x)
+            pred_y, prob_y = self.model.predict(inputs=x)
+            print(prob_y)
 
             hits = 0
             for i in range(len(labels)):
@@ -97,7 +101,7 @@ class Interface:
             )
 
             # Show graph
-            pred_y = self.model.predict(inputs=x)
+            pred_y, _ = self.model.predict(inputs=x)
             self.show_result(x, labels, pred_y)
             self.show_learning_curve(range(1, epoch + 1), lossRecord)
 

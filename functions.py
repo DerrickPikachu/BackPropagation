@@ -13,6 +13,14 @@ def sigmoid(x):
     return 1.0 / (1.0 + np.exp(-x))
 
 
+def no_activation(x):
+    return x
+
+
+def derivative_no_activation(x):
+    return np.ones_like(x)
+
+
 def derivative_sigmoid(x):
     return np.multiply(x, 1.0 - x)
 
@@ -88,6 +96,10 @@ functionDic = {
     'cross_entropy': {
         'normal': bin_cross_entropy,
         'derivative': derivative_bin_cross_entropy,
+    },
+    'none': {
+        'normal': no_activation,
+        'derivative': derivative_no_activation,
     },
     'generateData': {
         'linear': generate_linear,

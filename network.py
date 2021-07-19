@@ -77,11 +77,13 @@ class Network:
 
     def predict(self, inputs):
         pred_y = []
+        pred_prob_y = []
         for i in inputs:
             self.inputLayer.setup(i)
             self.forwardPass()
+            pred_prob_y.append(self.outputLayer.outputValue)
             pred_y.append(1 if self.outputLayer.outputValue[0] > 0.5 else 0)
-        return np.array(pred_y)
+        return np.array(pred_y), np.array(pred_prob_y)
 
     def fit(self, inputs, labels, loss_f, batch_size=15, epoch=100) -> []:
         lossRecord = []
