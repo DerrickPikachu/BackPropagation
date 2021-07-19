@@ -18,3 +18,7 @@ The first Lab in NYCU Deep Learning and Practice. The work is to implement an fe
 若是選擇新train一個model，training會自動開始，等待訓練完成即可
 
 github網址: https://github.com/DerrickPikachu/BackPropagation
+
+執行環境: Ubuntu 20.10
+
+python版本: 3.8
